@@ -1,7 +1,14 @@
 FROM python:3.5
 
-RUN apt-get update
-RUN apt-get -qy install git wget
+ARG dept=57
+ARG fichiergz=bano-${dept}.json.gz
+# fichier gzip complet : full.sjson.gz
+
+RUN apt-get update \
+	&& apt-get -qy --no-install-recommends install \
+		git \
+		wget \
+	&& apt-get clean && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
@@ -11,12 +18,13 @@ RUN pip install git+https://github.com/addok/addok-fr
 RUN pip install git+https://github.com/addok/addok-france
 RUN pip install git+https://github.com/addok/addok-trigrams
 
-RUN wget http://bano.openstreetmap.fr/data/bano-57.json.gz
-RUN gunzip bano-57.json.gz
+RUN wget "http://bano.openstreetmap.fr/data/${fichiergz}" \
+	&& gunzip "${fichiergz}"
 
 COPY local.py /app
 
 ENV ADDOK_CONFIG_MODULE /app/local.py
 ENV REDIS_HOST redis
 
-CMD addok batch bano-57.json
+CMD addok import *.json *.sjson
+
