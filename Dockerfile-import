@@ -1,8 +1,10 @@
 FROM python:3.5
 
-ARG dept=57
-ARG fichiergz=bano-${dept}.json.gz
-# fichier gzip complet : full.sjson.gz
+ARG full=
+ARG dept=${full:-57}
+ARG gzfile=${full:-bano-${dept}.json.gz}${full:+full.sjson.gz}
+
+RUN echo ${gzfile}
 
 RUN apt-get update \
 	&& apt-get -qy --no-install-recommends install \
@@ -18,8 +20,8 @@ RUN pip install git+https://github.com/addok/addok-fr
 RUN pip install git+https://github.com/addok/addok-france
 RUN pip install git+https://github.com/addok/addok-trigrams
 
-RUN wget "http://bano.openstreetmap.fr/data/${fichiergz}" \
-	&& gunzip "${fichiergz}"
+RUN wget "http://bano.openstreetmap.fr/data/${gzfile}" \
+	&& gunzip "${gzfile}"
 
 COPY local.py /app
 
