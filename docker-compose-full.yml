@@ -9,6 +9,8 @@ services:
       dockerfile: Dockerfile-import
       args:
         - full=full
+    volumes:
+      - redis-data:/var/lib/redis
     links:
       - db:redis
   api:
@@ -19,3 +21,8 @@ services:
       - db:redis
     ports:
       - 7878:7878
+
+volumes:
+  redis-data:
+    driver: local
+
