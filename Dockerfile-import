@@ -28,5 +28,5 @@ COPY local.py /app
 ENV ADDOK_CONFIG_MODULE /app/local.py
 ENV REDIS_HOST redis
 
-CMD addok import *.json *.sjson
+CMD addok import *json
 
