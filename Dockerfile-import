@@ -2,7 +2,7 @@ FROM python:3.5
 
 ARG full=
 ARG dept=${full:-57}
-ARG gzfile=${full:-bano-${dept}.json.gz}${full:+full.sjson.gz}
+ARG gzfile=${full:-bano-${dept}.json.gz}${full:+.sjson.gz}
 
 RUN echo ${gzfile}
 
